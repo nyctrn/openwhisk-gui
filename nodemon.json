@@ -1,0 +1,9 @@
+{
+  "verbose": false,
+  "ignore": ["node_modules", ".next"],
+  "watch": ["server"],
+  "ext": "ts js json",
+  "execMap": {
+    "ts": "ts-node --project tsconfig.server.json"
+  }
+}
