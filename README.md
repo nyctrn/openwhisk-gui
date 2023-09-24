@@ -39,10 +39,15 @@ Before you begin, ensure you have met the following requirements:
    yarn
    ```
 
+   Before the next step, update the env variables if needed.
+   The application uses the default addresses, ports, usernames and password for OpenWhisk
+
 5. Build Next.js application:
+
    ```
    yarn build
    ```
+
 6. Run the application:
    ```
    yarn start
@@ -77,13 +82,13 @@ Before you begin, ensure you have met the following requirements:
    cd openwhisk
    ```
 
-3. Navigate to the project directory:
+3. Start OpenWhisk:
 
    ```
    ./gradlew core:standalone:bootRun --args='--couchdb'
    ```
 
-Give it some time start. CouchDB should be running in a container
+Give it some time to start. After a CouchDB should be running in a container
 
 ```
 docker ps
