@@ -79,6 +79,7 @@ const ActionList = () => {
         filters={[<SearchInput source="q" key="search" alwaysOn />]}
         actions={<ListActions withCreateBtn />}
         pagination={<Pagination rowsPerPageOptions={[200]} perPage={200} />}
+        empty={false}
       >
         <CustomDatagridConfigurable />
       </List>
