@@ -1,0 +1,57 @@
+version: "3"
+
+volumes:
+  postgres_data:
+    driver: local
+
+services:
+
+  postgres:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+      
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1
+    command: -v start-dev --import-realm
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak_realm:/opt/keycloak/data/import
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    
+  openwhisk-gui:
+    build: .
+    image: openwhisk-gui
+    network_mode: host
+    ports:
+      -  "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      OPENWHISK_API_HOST: ${OPENWHISK_API_HOST}
+      OPENWHISK_API_GW_TOKEN: ${OPENWHISK_API_GW_TOKEN}
+      OPENWHISK_COUCHDB_USERNAME: ${OPENWHISK_COUCHDB_USERNAME} 
+      OPENWHISK_COUCHDB_PASSWORD: ${OPENWHISK_COUCHDB_PASSWORD} 
+      OPENWHISK_COUCHDB_ADDRESS: ${OPENWHISK_COUCHDB_ADDRESS}
+      OPENWHISK_COUCHDB_SUBJECTS_DB: ${OPENWHISK_COUCHDB_SUBJECTS_DB}
+      NEXT_PUBLIC_KEYCLOAK_AUTH_SERVER: ${NEXT_PUBLIC_KEYCLOAK_AUTH_SERVER}
+      NEXT_PUBLIC_KEYCLOAK_REALM: ${NEXT_PUBLIC_KEYCLOAK_REALM}
+      NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: ${NEXT_PUBLIC_KEYCLOAK_CLIENT_ID}
+      EXPRESS_SESSION_SECRET: ${EXPRESS_SESSION_SECRET}
+      PORT: ${PORT}
+    depends_on:
+      - keycloak
