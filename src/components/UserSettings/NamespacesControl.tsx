@@ -41,15 +41,9 @@ const NamespaceControl = () => {
 
   const isAdmin = permissions === "admin";
 
-  const currentNamespace = queryClient.getQueryData([
-    "namespaces",
-    "getOne",
-    { id: "0" },
-  ]) as any;
+  const { namespace } = queryClient.getQueryData(["namespace"]) as any;
 
-  const [userNamespace, setUserNamespace] = useState(
-    currentNamespace?.name ?? ""
-  );
+  const [userNamespace, setUserNamespace] = useState(namespace ?? "");
 
   const [targetUser, setTargetUser] = useState("");
 

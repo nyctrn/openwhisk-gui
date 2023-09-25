@@ -7,7 +7,7 @@ const StyledInputWrapper = styled("div")`
 
   input {
     font-size: 13px;
-    width: 85px;
+    width: 87px;
     height: 24px;
     padding-bottom: 0;
   }

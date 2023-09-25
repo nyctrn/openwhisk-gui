@@ -13,6 +13,7 @@ import {
   RadioGroup,
   LinearProgress,
   TextField,
+  Box,
 } from "@mui/material";
 import { useMutation } from "react-query";
 import { useState, useEffect, ChangeEvent } from "react";
@@ -59,6 +60,8 @@ const CustomArrayInput: React.FC<CustomArrayInputProps> = ({ onChange }) => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChange(index, e.target.value, e.target.name)
             }
+            label="name"
+            sx={{ marginRight: "1rem" }}
           />
           <TextField
             name="value"
@@ -67,6 +70,7 @@ const CustomArrayInput: React.FC<CustomArrayInputProps> = ({ onChange }) => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChange(index, e.target.value, e.target.name)
             }
+            label="value"
           />
           <Button
             type="button"
@@ -161,50 +165,71 @@ const ActionInvoker = () => {
           <TextField
             label="enter action name..."
             onChange={handleInputChange}
+            sx={{ width: "600px" }}
           />
         )}
-        <RadioGroup
-          row
-          name="radio-buttons-blocking"
-          onChange={handleChange}
-          value={isBlocking}
+        <Box
+          display={{
+            display: "flex",
+            gap: "2rem",
+            position: "relative",
+            width: "500px",
+          }}
         >
-          <FormControlLabel value="true" control={<Radio />} label="Blocking" />
-          <FormControlLabel
-            value="false"
-            control={<Radio />}
-            label="Non-blocking"
+          <Box>
+            <RadioGroup
+              row
+              name="radio-buttons-blocking"
+              onChange={handleChange}
+              value={isBlocking}
+            >
+              <FormControlLabel
+                value="true"
+                control={<Radio />}
+                label="Blocking"
+              />
+              <FormControlLabel
+                value="false"
+                control={<Radio />}
+                label="Non-blocking"
+              />
+            </RadioGroup>
+            <RadioGroup
+              row
+              name="radio-buttons-result"
+              onChange={handleChange}
+              value={shouldReturnFuncResult}
+            >
+              <FormControlLabel
+                value="true"
+                control={<Radio />}
+                label="Action result only"
+                disabled={!isBlocking}
+              />
+              <FormControlLabel
+                value="false"
+                control={<Radio />}
+                label="Entire activation result"
+                disabled={!isBlocking}
+              />
+            </RadioGroup>
+            <CustomArrayInput onChange={handleArrayIputChange} />
+          </Box>
+          <Button
+            label="invoke action"
+            color="secondary"
+            variant="outlined"
+            onClick={() => mutate()}
+            disabled={!isEditMode && !actionName}
+            sx={{
+              position: "absolute",
+              left: "450px",
+              top: "10px",
+              width: "150px",
+            }}
           />
-        </RadioGroup>
-        <RadioGroup
-          row
-          name="radio-buttons-result"
-          onChange={handleChange}
-          value={shouldReturnFuncResult}
-        >
-          <FormControlLabel
-            value="true"
-            control={<Radio />}
-            label="Action result only"
-            disabled={!isBlocking}
-          />
-          <FormControlLabel
-            value="false"
-            control={<Radio />}
-            label="Entire activation result"
-            disabled={!isBlocking}
-          />
-        </RadioGroup>
+        </Box>
       </FormControl>
-
-      <CustomArrayInput onChange={handleArrayIputChange} />
-
-      <Button
-        label="invoke action"
-        color="secondary"
-        onClick={() => mutate()}
-        disabled={!isEditMode && !actionName}
-      />
 
       {error && (
         <>
