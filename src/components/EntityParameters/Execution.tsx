@@ -11,11 +11,13 @@ import {
 } from "../index";
 
 const Execution = (props: GridProps) => {
-  const [isSequence, setIsSequence] = useState(false);
+  const { setValue, watch, getValues } = useFormContext();
+
+  const [isSequence, setIsSequence] = useState(
+    getValues("exec.kind") === "sequence"
+  );
 
   const [isOther, setIsOther] = useState(false);
-
-  const { setValue, watch } = useFormContext();
 
   const handleKindChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "sequence") {
