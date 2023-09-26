@@ -7,7 +7,6 @@ import {
 } from "@/components";
 import { filterOutEmptyValues, useHasRecord } from "@/utils";
 import { useQueryClient } from "react-query";
-
 import { ElementType, useEffect } from "react";
 import {
   RestParams,

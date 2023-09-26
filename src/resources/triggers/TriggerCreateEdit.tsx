@@ -6,7 +6,8 @@ import {
   CustomDivider,
   CustomSimpleForm,
 } from "@/components";
-import { ReactNode, ElementType } from "react";
+import { ReactNode, ElementType, useEffect } from "react";
+import { useQueryClient } from "react-query";
 import { Annotations, RestParams } from "@/components/EntityParameters";
 import { useHasRecord } from "@/utils";
 import { TriggerInvoker } from "@/components";
@@ -26,6 +27,12 @@ const KeyValueWrapper = ({ children }: { children: ReactNode }) => (
 );
 
 const TriggerCreateEdit = () => {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries(["triggers", "getOne"]);
+  }, [queryClient]);
+
   //   const loading = useLoading();
 
   const isEdit = useHasRecord();

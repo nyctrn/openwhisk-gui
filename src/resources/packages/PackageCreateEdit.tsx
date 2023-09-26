@@ -1,7 +1,7 @@
 import { Edit, Create } from "react-admin";
 import { Grid } from "@mui/material";
 import { PageWrapper, CustomSimpleForm, CustomDivider } from "@/components";
-import { ElementType, ReactNode } from "react";
+import { ElementType, ReactNode, useEffect } from "react";
 import {
   Annotations,
   Parameters,
@@ -9,6 +9,7 @@ import {
 } from "@/components/EntityParameters";
 import { entityCreateEditStyles } from "@/themes/theme";
 import { useHasRecord } from "@/utils";
+import { useQueryClient } from "react-query";
 
 const KeyValueWrapper = ({ children }: { children: ReactNode }) => (
   <Grid
@@ -24,6 +25,12 @@ const KeyValueWrapper = ({ children }: { children: ReactNode }) => (
 );
 
 const PackageCreateEdit = () => {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries(["packages", "getOne"]);
+  }, [queryClient]);
+
   const isEdit = useHasRecord();
 
   const Component: ElementType = isEdit ? Edit : Create;
