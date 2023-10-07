@@ -65,7 +65,7 @@ router.post(
       );
 
       console.log(
-        `[POST /namespaces/${namespace}] Now using namespace: ${req.session.namespace}`
+        `[POST /namespaces/${namespace}] Now using namespace: ${req.session.namespace.name}`
       );
 
       res.status(200).json({ result: "ok" });

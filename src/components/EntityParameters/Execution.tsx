@@ -1,6 +1,6 @@
 import { TextInput, RadioButtonGroupInput } from "react-admin";
 import { Box, Grid, FormControl, GridProps } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import {
   FileUploader,
@@ -40,6 +40,10 @@ const Execution = (props: GridProps) => {
     }
   };
 
+  useEffect(() => {
+    setIsSequence(watch("exec.kind") === "sequence");
+  }, [watch("exec.kind")]);
+
   return (
     <>
       <Grid
@@ -76,7 +80,7 @@ const Execution = (props: GridProps) => {
               <TextInput source="exec.image" label="Docker image" />
             )}
 
-            <Box display="flex" alignItems="baseline" gap={2}>
+            <Box display="flex" alignItems="baseline" gap={isSequence ? 5 : 2}>
               {!isOther && (
                 <ActionKindIcon
                   execValue={watch("exec.kind")}

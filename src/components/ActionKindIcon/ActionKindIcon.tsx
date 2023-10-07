@@ -22,7 +22,7 @@ const kinds = [
   { type: "swift", icon: SwiftIcon, width: 45 },
   { type: "rust", icon: RustIcon, width: 45 },
   { type: "blackbox", icon: DockerIcon, width: 55 },
-  { type: "sequence", icon: SequenceIcon, width: 80 },
+  { type: "sequence", icon: SequenceIcon, width: 90 },
 ];
 
 const ActionKindIcon = ({
@@ -38,7 +38,10 @@ const ActionKindIcon = ({
           alt={`${kind.type} icon`}
           width={kind.width}
           loading="eager"
-          style={{ position: "relative", top: "7px" }}
+          style={{
+            position: "relative",
+            top: "7px",
+          }}
         />
       </Tooltip>
     ));

@@ -85,7 +85,7 @@ const SaveRestore = () => {
 
     const params = {
       data: {
-        name: "test1",
+        name: "Sequence",
         parameters: [],
         annotations: [],
         limits: [],

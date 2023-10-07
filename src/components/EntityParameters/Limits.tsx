@@ -30,7 +30,7 @@ const actionLimits = [
     validate: [minValue(128), maxValue(512)],
     infoIcon: {
       info: "The number of MB a container is allowed to allocate. Valid numbers are between 128 and 512.",
-      defaultValue: "10",
+      defaultValue: "256",
     },
   },
   {

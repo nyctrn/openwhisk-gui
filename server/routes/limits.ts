@@ -1,8 +1,9 @@
-import { OpenWhiskLimits } from "./../services/DatabaseService";
+import DatabaseService, {
+  OpenWhiskLimits,
+} from "./../services/DatabaseService";
 import express from "express";
 import { keycloakConnect } from "../utils";
 import axios from "axios";
-import DatabaseService from "../services/DatabaseService";
 // import { RequestError } from "nano";
 
 const router = express.Router();
