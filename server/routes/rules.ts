@@ -5,7 +5,12 @@ const router = express.Router();
 
 router.get("/", keycloakConnect.protect("realm:user"), async (req, res) => {
   try {
-    const rules = await openwhiskClient(req).rules.list();
+    const { limit, skip } = req.query;
+
+    const rules = await openwhiskClient(req).rules.list({
+      ...(limit && { limit: Number(limit) }),
+      ...(skip && { skip: Number(skip) }),
+    });
 
     console.log("[GET /rules] Response:", rules);
 
@@ -14,9 +19,10 @@ router.get("/", keycloakConnect.protect("realm:user"), async (req, res) => {
       id: rule.name,
     }));
 
-    const total = rules.length;
+    const total = await openwhiskClient(req).rules.list({ count: true });
 
-    return res.status(200).json({ data, total });
+    // @ts-ignore
+    return res.status(200).json({ data, total: total.rules });
   } catch (err: any) {
     console.log("Error at [GET /rules]", err);
 

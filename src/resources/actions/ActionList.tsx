@@ -12,7 +12,6 @@ import {
 } from "react-admin";
 import { ListActions, PageWrapper, ActionKindIcon } from "@/components";
 import { CopyAllSharp as CloneIcon } from "@mui/icons-material";
-import { Pagination } from "react-admin";
 
 const CustomDatagridConfigurable = () => {
   const { isFetching } = useListContext();
@@ -78,7 +77,6 @@ const ActionList = () => {
       <List
         filters={[<SearchInput source="q" key="search" alwaysOn />]}
         actions={<ListActions withCreateBtn />}
-        pagination={<Pagination rowsPerPageOptions={[200]} perPage={200} />}
         empty={false}
       >
         <CustomDatagridConfigurable />

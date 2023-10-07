@@ -21,6 +21,10 @@ router.get("/", keycloakConnect.protect("realm:user"), async (req, res) => {
       ...(skip && { skip: Number(skip) }),
     });
 
+    const total = await openwhiskClient(req).actions.list({
+      count: true,
+    });
+
     console.log("[GET /actions] Response:", actionsResponse);
 
     const actions = actionsResponse.map((action) => ({
@@ -28,9 +32,8 @@ router.get("/", keycloakConnect.protect("realm:user"), async (req, res) => {
       id: `${action.name}`,
     }));
 
-    const total = actionsResponse.length;
-
-    return res.status(200).json({ actions, total });
+    // @ts-ignore
+    return res.status(200).json({ actions, total: total.actions });
   } catch (err: any) {
     console.log("Error at [GET /actions]:", err);
 

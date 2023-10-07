@@ -69,9 +69,12 @@ router.get(
         };
       });
 
-      const total = activations.length;
-
-      return res.status(200).json({ data, total });
+      const total = await openwhiskClient(req).activations.list({
+        count: true,
+      });
+      console.log("totalActivations -> totalActivations:", total);
+      // @ts-ignore
+      return res.status(200).json({ data, total: total.activations });
     } catch (err: any) {
       console.log("Error at [GET /activations]:", err);
 

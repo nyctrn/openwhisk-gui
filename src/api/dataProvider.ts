@@ -5,11 +5,12 @@ import { Action } from "openwhisk";
 
 export const dataProvider = {
   getList: async (resource: string, params: { [key: string]: any }) => {
+    const limit = params.filter.limit ?? params.pagination.perPage ?? 200;
+    const skip =
+      params.filter.skip ??
+      (params.pagination.page - 1) * params.pagination.perPage;
     switch (resource) {
       case "actions":
-        const limit = params.filter.limit ?? 200;
-        const skip = params.filter.skip ?? 0;
-
         try {
           const {
             data: { actions, total },
@@ -33,9 +34,11 @@ export const dataProvider = {
       case "activations":
         try {
           const queryParams = {
-            limit: params.filter.limit ?? 200,
+            limit: params.filter.limit ?? params.pagination.perPage ?? 200,
             docs: params.filter.fullDesc ?? true,
-            skip: params.filter.skip,
+            skip:
+              params.filter.skip ??
+              (params.pagination.page - 1) * params.pagination.perPage,
             since: params.filter.since,
             upto: params.filter.upto,
             count: params.filter.count,
@@ -57,7 +60,9 @@ export const dataProvider = {
 
       case "triggers":
         try {
-          const { data } = await axiosClient.get("triggers");
+          const { data } = await axiosClient.get(
+            `triggers?limit=${limit}&skip=${skip}`
+          );
 
           return data;
         } catch (error) {
@@ -68,7 +73,9 @@ export const dataProvider = {
 
       case "rules":
         try {
-          const { data } = await axiosClient.get("rules");
+          const { data } = await axiosClient.get(
+            `rules?limit=${limit}&skip=${skip}`
+          );
 
           return data;
         } catch (error) {
@@ -79,7 +86,9 @@ export const dataProvider = {
 
       case "packages":
         try {
-          const { data } = await axiosClient.get("packages");
+          const { data } = await axiosClient.get(
+            `packages?limit=${limit}&skip=${skip}`
+          );
 
           return data;
         } catch (error) {

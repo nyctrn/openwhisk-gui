@@ -5,7 +5,12 @@ const router = express.Router();
 
 router.get("/", keycloakConnect.protect("realm:user"), async (req, res) => {
   try {
-    const triggers = await openwhiskClient(req).triggers.list();
+    const { limit, skip } = req.query;
+
+    const triggers = await openwhiskClient(req).triggers.list({
+      ...(limit && { limit: Number(limit) }),
+      ...(skip && { skip: Number(skip) }),
+    });
 
     console.log("[GET /triggers] Response:", triggers);
 
@@ -14,9 +19,10 @@ router.get("/", keycloakConnect.protect("realm:user"), async (req, res) => {
       id: trigger.name,
     }));
 
-    const total = triggers.length;
+    const total = await openwhiskClient(req).triggers.list({ count: true });
 
-    return res.status(200).json({ data, total });
+    // @ts-ignore
+    return res.status(200).json({ data, total: total.triggers });
   } catch (err: any) {
     console.log("Error at [GET /triggers]", err);
 

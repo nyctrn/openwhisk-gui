@@ -5,7 +5,12 @@ const router = express.Router();
 
 router.get("/", keycloakConnect.protect("realm:user"), async (req, res) => {
   try {
-    const packages = await openwhiskClient(req).packages.list();
+    const { limit, skip } = req.query;
+
+    const packages = await openwhiskClient(req).packages.list({
+      ...(limit && { limit: Number(limit) }),
+      ...(skip && { skip: Number(skip) }),
+    });
 
     console.log("[GET /packages] Response:", packages);
 
@@ -13,9 +18,11 @@ router.get("/", keycloakConnect.protect("realm:user"), async (req, res) => {
       ...pkg,
       id: pkg.name,
     }));
-    const total = packages.length;
 
-    return res.status(200).json({ data, total });
+    const total = await openwhiskClient(req).packages.list({ count: true });
+
+    // @ts-ignore
+    return res.status(200).json({ data, total: total.packages });
   } catch (err: any) {
     console.log("Error at [GET /packages]:", err);
 
